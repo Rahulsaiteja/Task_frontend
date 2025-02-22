@@ -23,7 +23,6 @@ const App = () => {
 
     const afterLogin = (respObj) => {
         const newStateUser = { isLoggedIn: true, fullName: respObj.data.user.fullName };
-        //window.localStorage.setItem
         localStorage.setItem("isLoggedIn", true);
         setCurrUser(newStateUser);
     };
@@ -48,7 +47,6 @@ const App = () => {
     }, []);
 
     const handleLogout = async () => {
-        
         localStorage.removeItem("isLoggedIn");
         const resp = await fetch(import.meta.env.VITE_BACKEND_URL + "/users/logout", {
             credentials: "include",
@@ -68,10 +66,11 @@ const App = () => {
         <div>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={currUser.isLoggedIn ? ( <HomePage currUser={currUser} handleLogout={handleLogout}/>) : (<Navigate to="/login" />)} />
-                    <Route path="/login" element={currUser.isLoggedIn ? <Navigate to="/" /> : <LoginPage afterLogin={afterLogin} />} />
-                    <Route path="/sign-up" element={currUser.isLoggedIn ? <Navigate to="/" /> : <SignUpPage />} />
-                    <Route path="/tasks" element={currUser.isLoggedIn ?<TaskPage /> : <Navigate to="/login" /> } />
+                    <Route path="/" element={<SignUpPage />} />
+                    <Route path="/login" element={currUser.isLoggedIn ? <Navigate to="/tasks" /> : <LoginPage afterLogin={afterLogin} />} />
+                    <Route path="/sign-up" element={<SignUpPage />} />
+                    <Route path="/tasks" element={currUser.isLoggedIn ? <TaskPage /> : <Navigate to="/login" />} />
+                    <Route path="/home" element={currUser.isLoggedIn ? <HomePage currUser={currUser} handleLogout={handleLogout} /> : <Navigate to="/login" />} />
                     <Route
                         path="*"
                         element={
